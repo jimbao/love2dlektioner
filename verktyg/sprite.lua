@@ -15,8 +15,7 @@ function Sprite.ny(x, y, ...)
 end
 
 function Sprite:rita()
-    love.graphics.setColor(255, 255, 255);
-    love.graphics.circle("fill", self.x, self.y, 50, 100)
+    
 end
 
 function Sprite:uppdatera()

@@ -1,16 +1,15 @@
 package.path = "../verktyg/?.lua;" .. package.path
 require "bas"
-require "sprite"
+require "cirkel"
 
 local sprites = {}
 
 function love.load()
     bas.starta(bas.hanteraSignaler)
     bas.starta(bas.uppdateraGrafik)
-    cirkel = Sprite(100, 100)
+    cirkel = Cirkel(100, 100)
     table.insert(sprites, cirkel)
     bas.startaGrafik(cirkel)
-    text = "Hej!"
 end
 
 function love.update()
@@ -22,22 +21,22 @@ function love.draw()
     for _, sprite in pairs(sprites) do
         sprite:rita()
     end
-    love.graphics.print(text, 550, 300)
 end
 
 function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
     end
-    if key == " " then 
-        bas.skickaSignal(mellanslag, "Mellanslag!")
-    end
-    if key == "w" then
-        text = "Hejsan"
-    end
 end
 
-function mellanslag(event, ...)
-    text = event
+function Cirkel:uppdatera()
+    if self.x + self.radie > 800 or self.x - self.radie < 0 then
+        self.xfart = self.xfart * -1 -- Gånger minus ändrar från negativt till positivt
+    end
+    if self.y + self.radie > 600 or self.y - self.radie < 0 then
+        self.yfart = self.yfart * -1 -- Gånger minus ändrar från positivt till negativt
+    end
+    self.x = self.x + self.xfart
+    self.y = self.y + self.yfart
 end
 
