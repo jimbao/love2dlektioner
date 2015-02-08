@@ -14,7 +14,7 @@ end
 
 function love.update()
     bas.tick()
-    love.timer.sleep(1/30)
+    -- love.timer.sleep(1/30)
 end
 
 function love.draw()
