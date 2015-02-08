@@ -7,12 +7,14 @@ points = 0
 function love.load()
     bas.starta(bas.hanteraSignaler)
     bas.starta(bas.uppdateraGrafik)
+    bas.starta(bas.repeteraAlla)
+    bas.repetera(testSchema, 3, true, "Param")
+    bas.repetera(testFaster, 2, false, 2)
     -- bas.startaGrafik()
 end
 
 function love.update()
     bas.tick()
-    love.timer.sleep(1/30)
 end
 
 function love.draw()
@@ -27,3 +29,14 @@ function love.keypressed(key)
         love.event.quit()
     end
 end
+
+function testSchema(...)
+    print(...)
+end
+
+function testFaster(delay)
+    print(delay)
+    delay = delay * 0.9
+    bas.repetera(testFaster, delay, false, delay)
+end
+

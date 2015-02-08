@@ -3,6 +3,8 @@ bas = {}
 local tickande = {}
 local signaler = {}
 local grafik = {}
+local scheman = {}
+local tid = 0
 
 -- Kör alla signaler som har kommit in sen senast
 function bas.hanteraSignaler()
@@ -16,6 +18,12 @@ function bas.hanteraSignaler()
     until false
 end
 
+-- Anropa en funktion med ... parametrar
+function bas.skickaSignal(signal, ...)
+    -- params: function, ...
+    signaler[signal] = {...}
+end
+
 -- Starta en coroutine
 function bas.starta(objekt)
     -- params: function
@@ -25,22 +33,44 @@ end
 
 -- Kör alla coroutines en gång
 function bas.tick()
+    tid = tid + love.timer.getDelta()
     for _, objekt in pairs(tickande) do
         coroutine.resume(objekt)
     end
 end
 
--- Skicka en signal
-function bas.skickaSignal(signal, ...)
-    -- params: function, ...
-    signaler[signal] = {...}
+-- DEFECT: 2 calls scheduled at the same time will overwrite eachother
+-- Schemalägg ett funktionsanrop
+function bas.repetera(funktion, paus, repetera, ...)
+    -- params: function, integer, boolean
+    scheman[tid + paus] = {
+        ["funktion"]=funktion, ["paus"]=paus, ["repetera"]=repetera, ["params"]={...}
+    }
+end
+
+-- Kör Schemalagda funktioner
+function bas.repeteraAlla() 
+    repeat
+        for i, schema in pairs(scheman) do
+            if i <= tid then
+                schema["funktion"](unpack(schema["params"]))
+                if schema["repetera"] then
+                    bas.repetera(
+                        schema["funktion"], schema["paus"], schema["repetera"], unpack(schema["params"])
+                    )
+                end
+                scheman[i] = nil
+            end
+        end
+        coroutine.yield()
+    until false
 end
 
 -- Uppdatera grafik
 function bas.uppdateraGrafik()
     repeat
-        for _, bild in pairs(grafik) do
-            bild:uppdatera()
+        for _, sprite in pairs(grafik) do
+            sprite:uppdatera()
         end
         coroutine.yield()
     until false
