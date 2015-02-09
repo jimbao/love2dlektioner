@@ -7,18 +7,28 @@ setmetatable(Sprite, {
   end,
 })
 
-function Sprite.ny(x, y, ...)
-  local self = setmetatable({}, Sprite)
-  self.x = x
-  self.y = y
-  return self
+function Sprite.ny(x, y, skala, kostymer, ...)
+    local self = setmetatable({}, Sprite)
+    self.x = x
+    self.y = y
+    self.xfart = 4
+    self.yfart = 4
+    self.skala = skala
+    self.kostym = 1
+    self.kostymer = kostymer
+    for nummer, filnamn in pairs(kostymer) do
+        bild = love.graphics.newImage( filnamn )
+        self.kostymer[nummer] = bild
+    end
+    self.bredd = kostymer[1]:getWidth() * self.skala
+    self.hojd = kostymer[1]:getHeight() * self.skala
+    return self
 end
 
 function Sprite:rita()
-    
+    love.graphics.draw( self.kostymer[self.kostym], self.x, self.y, 0, self.skala)
 end
 
-function Sprite:uppdatera()
-    self.x = self.x + 3
-    self.y = self.y + 3
+function Sprite:bytKostym()
+    self.kostym = self.kostym % table.getn(self.kostymer) + 1
 end
