@@ -80,3 +80,7 @@ function bas.startaGrafik(sprite, funktion)
     -- params: sprite med funktionen uppdatera
     grafik[sprite]=funktion
 end
+
+function bas.raderaGrafik(sprite) 
+    grafik[sprite] = nil
+end

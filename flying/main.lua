@@ -24,7 +24,7 @@ function love.load()
     bas.starta(bas.hanteraSignaler)
     bas.starta(bas.uppdateraGrafik)
     bas.starta(bas.repeteraAlla)
-    spelare = Sprite(150, 250, 0, 0, 0.14, spelarkostymer, spelaranimationer)
+    spelare = Sprite(75, 250, 0, 0, 0.14, spelarkostymer, spelaranimationer)
     table.insert(sprites, spelare)
     bas.repetera(animera, 0.15, true, spelare)
     bas.startaGrafik(spelare, uppdateraSpelare)
@@ -74,7 +74,9 @@ end
 function uppdateraSkott(skott)
     skott.x = skott.x + skott.xfart
     if skott.x > 1000 then
+        -- Minneshantering
         sprites[skott] = nil
+        bas.raderaGrafik(skott)
     end
 end
 
