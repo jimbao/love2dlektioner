@@ -29,7 +29,6 @@ end
 -- Denna funktion repeteras för alltid
 function love.update()
     bas.tick()
-    -- love.timer.sleep(1/30)
 end
 
 -- Denna funktion repeteras för alltid

@@ -15,13 +15,13 @@ function Sprite.ny(x, y, skala, kostymer, ...)
     self.yfart = 4
     self.skala = skala
     self.kostym = 1
-    self.kostymer = kostymer
+    self.kostymer = {}
     for nummer, filnamn in pairs(kostymer) do
         bild = love.graphics.newImage( filnamn )
         self.kostymer[nummer] = bild
     end
-    self.bredd = kostymer[1]:getWidth() * self.skala
-    self.hojd = kostymer[1]:getHeight() * self.skala
+    self.bredd = self.kostymer[1]:getWidth() * self.skala
+    self.hojd = self.kostymer[1]:getHeight() * self.skala
     return self
 end
 
