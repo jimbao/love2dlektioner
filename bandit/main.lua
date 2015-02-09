@@ -13,9 +13,9 @@ function love.load()
     bas.starta(bas.hanteraSignaler)
     bas.starta(bas.uppdateraGrafik)
     bas.starta(bas.repeteraAlla)
-    rad1 = Sprite(100, 230, 0.2, kostymer)
-    rad2 = Sprite(300, 230, 0.2, kostymer)
-    rad3 = Sprite(500, 230, 0.2, kostymer)
+    rad1 = Sprite(100, 230, 0, 0, 0.2, kostymer)
+    rad2 = Sprite(300, 230, 0, 0, 0.2, kostymer)
+    rad3 = Sprite(500, 230, 0, 0, 0.2, kostymer)
     table.insert(sprites, rad1)
     table.insert(sprites, rad2)
     table.insert(sprites, rad3)
@@ -44,4 +44,3 @@ end
 function animera(sprite)
     sprite:bytKostym()
 end
-

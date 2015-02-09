@@ -69,14 +69,14 @@ end
 -- Uppdatera grafik
 function bas.uppdateraGrafik()
     repeat
-        for _, sprite in pairs(grafik) do
-            sprite:uppdatera()
+        for sprite, funktion in pairs(grafik) do
+            funktion(sprite)
         end
         coroutine.yield()
     until false
 end
 
-function bas.startaGrafik(sprite)
+function bas.startaGrafik(sprite, funktion)
     -- params: sprite med funktionen uppdatera
-    table.insert(grafik, sprite)
+    grafik[sprite]=funktion
 end

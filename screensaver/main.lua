@@ -20,9 +20,9 @@ local kostymer = {
 function love.load()
     bas.starta(bas.uppdateraGrafik)
     bas.starta(bas.repeteraAlla)
-    mynt = Sprite(200, 200, 0.2, kostymer)
+    mynt = Sprite(200, 200, 4, 4, 0.2, kostymer)
     table.insert(sprites, mynt)
-    bas.startaGrafik(mynt)
+    bas.startaGrafik(mynt, uppdatera)
     bas.repetera(animera, 0.15, true)
 end
 
@@ -49,7 +49,7 @@ function animera()
     mynt:bytKostym()
 end
 
-function Sprite:uppdatera()
+function uppdatera(self)
     if self.x + self.bredd > 800 or self.x < 0 then
         self.xfart = self.xfart * -1 -- Gånger minus ändrar från negativt till positivt
     end
