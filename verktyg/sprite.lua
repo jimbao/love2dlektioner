@@ -14,12 +14,17 @@ function Sprite.ny(x, y, xfart, yfart, skala, kostymer, animationer, ...)
     self.xfart = xfart
     self.yfart = yfart
     self.skala = skala
+    self.vinkel = 0
     self.kostym = 1
     self.kostymer = {}
     self.animationer = {}
-    for nummer, filnamn in pairs(kostymer) do
-        bild = love.graphics.newImage( filnamn )
-        self.kostymer[nummer] = bild
+    if kostymer then
+        for nummer, filnamn in pairs(kostymer) do
+            bild = love.graphics.newImage( filnamn )
+            self.kostymer[nummer] = bild
+        end
+        self.bredd = self.kostymer[1]:getWidth() * self.skala
+        self.hojd = self.kostymer[1]:getHeight() * self.skala
     end
     if animationer then
         for namn, tabell in pairs(animationer) do
@@ -32,14 +37,12 @@ function Sprite.ny(x, y, xfart, yfart, skala, kostymer, animationer, ...)
         end
     end
     self.animation = self.kostymer
-    self.bredd = self.kostymer[1]:getWidth() * self.skala
-    self.hojd = self.kostymer[1]:getHeight() * self.skala
     self.stop = false
     return self
 end
 
 function Sprite:rita()
-    love.graphics.draw( self.animation[self.kostym], self.x, self.y, 0, self.skala)
+    love.graphics.draw( self.animation[self.kostym], self.x, self.y, self.vinkel, self.skala)
 end
 
 function Sprite:bytKostym()
@@ -59,4 +62,10 @@ end
 function Sprite:stopAnimation(namn)
     self.stop = true
     self.animation = self.animationer[namn]
+end
+
+function Sprite:kopiera()
+    local kopia = Sprite.ny()
+    for n,v in pairs(self) do kopia[n] = v end
+    return kopia
 end
