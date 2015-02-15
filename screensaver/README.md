@@ -1,10 +1,10 @@
-# Letion 1
+# Lektion 1
 
 ## En animerad skärmsläckare
 
-I denna letion så kommer vi skapa ett animerat mynt som studsar på skärmkanten
+I denna lektion så kommer vi skapa ett animerat mynt som studsar på skärmkanten. Öppna filen main.lua och följ instruktionerna som följer.
 
-Först behöver vi två tabeller, en för sprites och en för alla bilder som myntet kan ha
+Först behöver vi två tabeller (listor i lua kallas tabeller), en för sprites och en för alla bilder som myntet kan ha. Vi kommer använda dessa tabeller senare. Det är alltså två variabler skapas med koden nedanför.
 
 ```
 local sprites = {} -- Skapar en tom tabell
@@ -43,5 +43,44 @@ Varje gång Löve 2d vill rita spelet så kommer draw att anropas. Det går inte
 function love.draw()
 
 end
+```
+
+Det är alltid smidigt att kunna stänga ett spel enkelt när man utvecklar. För att göra så att ESC avslutar spelet så lägg till denna kod längst ner i main.lua
+
+```
+-- Denna funktion läser tangentbordet
+function love.keypressed(key)
+    if key == "escape" then
+        love.event.quit()
+    end
+end
+```
+
+Vi kommer börja med att lägga in några rader kod för att köra saker i bakgrunden. Detta kan göras med trådar eller med coroutines i lua. I dessa lektioner används coroutines. Ändra på load funktionen så att den ser ut såhär; Lägg även till funktionerna uppdatera och animera
+
+```
+-- Ladda spelet
+function love.load()
+    bas.starta(bas.uppdateraGrafik) -- Startar en coroutine för att köra funktioner kopplade till en sprite
+    bas.starta(bas.repeteraAlla) -- Startar en coroutine för att repetera en funktion med ett visst intervall
+    mynt = Sprite(200, 200, 4, 4, 0.2, kostymer) -- Skapar en sprite med alla kostymer
+    table.insert(sprites, mynt) -- Stoppar myntet i tabellen av sprites som ska ritas på skärmen
+    bas.startaGrafik(mynt, uppdatera) -- kopplar en funktion som heter uppdatera (som inte finns) till mynt spriten
+    bas.repetera(animera, 0.15, true) -- Funktionen animera anropas för alltid med 0.15 sekunders mellanrum
+end
+
+function uppdatera()
+
+end
+
+function animera()
+
+end
+```
+
+Nu har vi alltså laddat en sprite och lite hjälpmedel för att kunna animera och schemalägga funktioner
+
+```
+
 ```
 
