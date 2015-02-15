@@ -98,3 +98,22 @@ Testa att starta spelet nu. Som du kommer att märka så är myntet inte animera
 
 ## Uppdatera och animera
 
+```
+-- Anropar en funktion för att byta bild i tabellen med animationer i myntspriten
+function animera()
+    mynt:bytKostym()
+end
+
+-- Får myntet att studsa när myntet nuddar kanten av skärmen
+function uppdatera(self)
+    if self.x + self.bredd > 800 or self.x < 0 then
+        self.xfart = self.xfart * -1 -- Gånger minus ändrar från negativt till positivt
+    end
+    if self.y + self.hojd > 600 or self.y < 0 then
+        self.yfart = self.yfart * -1 -- Gånger minus ändrar från positivt till negativt
+    end
+    self.x = self.x + self.xfart
+    self.y = self.y + self.yfart
+end
+```
+
