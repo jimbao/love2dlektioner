@@ -3,6 +3,7 @@ require "bas"
 require "sprite"
 
 sprites = {}
+hinder = {}
 spelarkostymer = {
     "resources/player/frame-1.png",
     "resources/player/frame-2.png",
@@ -21,23 +22,35 @@ function love.load()
     bas.starta(bas.uppdateraGrafik)
     bas.starta(bas.repeteraAlla)
     bakgrund = love.graphics.newImage( "resources/background.png" )
-    happy = Sprite(75, 250, 0, 0, 0.14, spelarkostymer)
+    getready = love.graphics.newImage( "resources/Get-Ready.png" )
+    happy = Sprite(125, 250, 0, 0, 0.14, spelarkostymer)
     golvtorn = Sprite(850, 100, -5, 0, 0.14, tornkostymer)
     taktorn = Sprite(940, -100, -5, 0, -0.14, tornkostymer)
     table.insert(sprites, happy)
     bas.repetera(animera, 0.15, true, happy)
     bas.repetera(skapaTorn, 1.5, true)
     bas.startaGrafik(happy, uppdateraSpelare)
+    spelstatus = "paus"
 end
 
 function love.update()
-    bas.tick()
+    if spelstatus == "startad" then
+        bas.tick()
+        for _, torn in pairs(hinder) do
+            if happy:krock(torn) then
+                reset()
+            end
+        end
+    end
 end
 
 function love.draw()
     love.graphics.draw(bakgrund, 0, 0, 0, 1.2)
     for _, sprite in pairs(sprites) do
         sprite:rita()
+    end
+    if spelstatus == "paus" then
+        love.graphics.draw(getready, 200, 150, 0, 0.2)
     end
 end
 
@@ -46,12 +59,28 @@ function love.keypressed(key)
         love.event.quit()
     end
     if key == " " then
+        if spelstatus ~= "startad" then
+            start()
+        end
         bas.skickaSignal(fly, happy)
     end
 end
 
 function animera(sprite)
     sprite:bytKostym()
+end
+
+function start()
+    spelstatus = "startad"
+end
+
+function reset()
+    sprites = {}
+    hinder = {}
+    table.insert(sprites, happy)
+    happy.y = 250
+    happy.vinkel = 0
+    spelstatus = "paus"
 end
 
 function skapaTorn()
@@ -64,6 +93,8 @@ function skapaTorn()
     golvtornkopia.kostym = taktornkopia.kostym
     table.insert(sprites, golvtornkopia)
     table.insert(sprites, taktornkopia)
+    table.insert(hinder, golvtornkopia)
+    table.insert(hinder, taktornkopia)
     bas.startaGrafik(golvtornkopia, uppdateraTorn)
     bas.startaGrafik(taktornkopia, uppdateraTorn)
 end

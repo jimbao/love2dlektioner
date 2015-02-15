@@ -69,3 +69,25 @@ function Sprite:kopiera()
     for n,v in pairs(self) do kopia[n] = v end
     return kopia
 end
+
+function Sprite:krock(other)
+    if other == self then
+        return false
+    end
+    if other.skala < 0 then
+        -- Inverted
+        x2 = other.x + other.bredd
+        y2 = other.y + other.hojd
+        h2 = other.hojd * -1
+        w2 = other.bredd * -1
+    else
+        x2, y2, h2, w2 = other.x, other.y, other.hojd, other.bredd
+    end
+    x1, y1, h1, w1 = self.x, self.y, self.hojd, self.bredd
+    return x1 < x2+w2 and
+        x2 < x1+w1 and
+        y1 < y2+h2 and
+        y2 < y1+h1
+end
+
+
