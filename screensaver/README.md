@@ -78,9 +78,23 @@ function animera()
 end
 ```
 
-Nu har vi alltså laddat en sprite och lite hjälpmedel för att kunna animera och schemalägga funktioner
+Nu har vi alltså laddat en sprite och lite hjälpmedel för att kunna animera och schemalägga funktioner. Nu ska vi bara se till så att den sprite vi har definerat ritas och att vi kör våra bakgrundsfunktioner varje gång spelet uppdateras
 
 ```
+-- Denna funktion repeteras för alltid
+function love.update()
+    bas.tick()
+end
 
+-- Denna funktion repeteras för alltid
+function love.draw()
+    for _, sprite in pairs(sprites) do
+        sprite:rita()
+    end
+end
 ```
+
+Testa att starta spelet nu. Som du kommer att märka så är myntet inte animerat och det står stilla
+
+## Uppdatera och animera
 
