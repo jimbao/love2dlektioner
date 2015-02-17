@@ -61,3 +61,45 @@ bas.repetera(animera, 0.15, true, happy)
 
 ## Få happy att dyka
 
+Ett sätt att få happy att dyka är att flytta i en riktning. När en sprite skapas är vinkeln noll. Så en negativ vinkel kommer att få happy att titta uppåt och en positiv vinkel får happy att titta nedåt. Om y är en funktion av vinkeln så kommer happy flytta sig uppåt med en negativ vinkel och tvärt om.
+
+Lägg till 
+
+Denna kod får det att se ut som att happy dyker.
+```
+function uppdateraHappy(happy)
+    -- Öka y fart med vinkeln gånger 15
+    happy.yfart = happy.vinkel * 15
+    if happy.vinkel < 1.0 then -- Bestäm en max vinkel
+        happy.vinkel = happy.vinkel + 0.05
+    end
+    -- Stoppa happy från att ramla ur bild (valfritt)
+    if (happy.y + happy.hojd < 600 or happy.yfart < 0) and (happy.y > 0 or happy.yfart > 0) then
+        happy.y = happy.y + happy.yfart
+    end
+end
+```
+Lägg till denna rad i love.load() för att köra uppdateraHappy varje gång love.update() kör
+```
+bas.startaGrafik(happy, uppdateraHappy)
+```
+
+## Få happy att flyga
+
+Eftersom happy nu faller beroende av vinkeln så kan vi koppla en knapp till att återställa vinkeln. Då kommer happy att röra sig uppåt om vinkeln sätts till att vara negativ
+
+Skapa funktionen flyg
+```
+function flyg(sprite)
+    sprite.vinkel = -0.55
+end
+```
+Lägg sedan till tre rader i love.keypressed(key)
+```
+if key == " " then
+    bas.skickaSignal(flyg, happy)
+end
+```
+Nu borde happy flyga varje gång man trycker på mellanslag
+
+## Skapa torn
