@@ -175,3 +175,34 @@ end
 Nu bör tornen inte vara likadana hela tiden. Men happy kan inte krocka med dom
 
 ## Få happy att krocka med tornen
+
+Först skapar vi en funktion som vi kallar reset. Syftet är att återställa spelet till startpunkten.
+
+```
+function reset()
+    sprites = {}
+    hinder = {}
+    table.insert(sprites, happy)
+    happy.y = 250
+    happy.vinkel = 0
+end
+```
+
+För att upptäcka när happy krockar med torn så kan man lägga till kod i love.update()
+
+```
+for _, torn in pairs(hinder) do
+    if happy:krock(torn) then
+        reset()
+    end
+end
+```
+Med denna kod så kommer spelet återställas till startpunkten varje gång happy krockar med ett torn. 
+
+## Lägg till en bakgrund
+
+## Räkna poäng
+
+## Rita poäng
+
+## Game over
