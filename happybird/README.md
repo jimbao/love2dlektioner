@@ -103,3 +103,75 @@ end
 Nu borde happy flyga varje gång man trycker på mellanslag
 
 ## Skapa torn
+
+För att spelet ska vara intressant så behöver vi hinder som happy måste passera. Börja med att skapa en tabell med grafik för hindren. 
+
+Först måste vi skapa två stycken torn som vi kommer att klona i love.load()
+```
+golvtorn = Sprite(850, 100, -5, 0, 0.14, tornkostymer)
+taktorn = Sprite(940, -100, -5, 0, -0.14, tornkostymer)
+bas.repetera(skapaTorn, 1.5, true) -- Skapa torn med 1.5 sekunders mellanrum
+```
+
+För att klona tornen och få dom att röra sig
+
+```
+hinder = {} --En tom tabell för alla hinder som finns på banan
+-- Alla hinder är torn och kan ha olika färger
+tornkostymer = {
+    "resources/towers/Green-tower.png",
+    "resources/towers/Icy-tower.png",
+    "resources/towers/Pink-tower.png",
+    "resources/towers/Yellow-tower.png",
+}
+
+-- Kopierar golvtorn och taktorn från love.load och får dom att uppdatera sig hela tiden
+function skapaTorn()
+    golvtornkopia = golvtorn:kopiera()
+    taktornkopia = taktorn:kopiera()
+    golvtornkopia.y = 300
+    taktornkopia.y = 100
+    table.insert(hinder, golvtornkopia)
+    table.insert(hinder, taktornkopia)
+    bas.startaGrafik(golvtornkopia, uppdateraTorn)
+    bas.startaGrafik(taktornkopia, uppdateraTorn)
+end
+
+function uppdateraTorn(torn)
+    torn.x = torn.x + torn.xfart --torn.xfart är -5
+end
+```
+För att rita tornen så behöver vi ändra på love.draw(). Lägg till dessa fyra rader för att rita alla torn
+```
+-- För varje torn i tabellen hinder så anropa funktionen rita
+for _, torn in pairs(hinder) do
+    torn:rita()
+end
+```
+
+Om man kör spelet nu så kommer det likadana torn på samma plats hela tiden
+
+## Slumpa färg och plats på tornen
+
+För att få tornen att vara olika höga varje gång som de klonas så kan vi använda ett slumptal. Ändra på funktionen skapa torn så att den ser ut som nedan.
+```
+function skapaTorn()
+    slump = math.random(100, 500) -- Slumpa ett tal mellan 100 och 500
+    golvtornkopia = golvtorn:kopiera()
+    taktornkopia = taktorn:kopiera()
+    golvtornkopia.y = slump + 100 -- Lägg till 100 för att tornet ska hamna lägre ner
+    taktornkopia.y = slump - 100 -- Ta bort 100 för att tornet ska hamna högre upp
+    -- Ändra slumptalet så att det är mellan 0 och 3 och lägg till 1, tornen har 4 olika kostymer
+    taktornkopia.kostym = slump % table.getn(taktornkopia.kostymer) + 1
+    -- Ge golvtornet samma kostym som taktornet
+    golvtornkopia.kostym = taktornkopia.kostym
+    table.insert(hinder, golvtornkopia) --Lägg till tornen bland hinder
+    table.insert(hinder, taktornkopia)
+    bas.startaGrafik(golvtornkopia, uppdateraTorn) -- Få tornen att uppdatera sig
+    bas.startaGrafik(taktornkopia, uppdateraTorn)
+end
+```
+
+Nu bör tornen inte vara likadana hela tiden. Men happy kan inte krocka med dom
+
+## Få happy att krocka med tornen
