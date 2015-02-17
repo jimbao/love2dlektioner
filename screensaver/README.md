@@ -117,3 +117,10 @@ function uppdatera(self)
 end
 ```
 
+## Utmaningar
+
+Gör en eller flera av nedanstående uppgifter
+
+* Skapa flera mynt i olika storlekar (Flera sprites)
+* Få myntet att snurra åt andra hållet (Animerad baklänges)
+* Prova olika rörelsemönster för myntet (Flera uppdatera funktioner)

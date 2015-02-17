@@ -16,6 +16,18 @@ tornkostymer = {
     "resources/towers/Pink-tower.png",
     "resources/towers/Yellow-tower.png",
 }
+nummerkostymer = {
+    "resources/numbers/0.png",
+    "resources/numbers/1.png",
+    "resources/numbers/2.png",
+    "resources/numbers/3.png",
+    "resources/numbers/4.png",
+    "resources/numbers/5.png",
+    "resources/numbers/6.png",
+    "resources/numbers/7.png",
+    "resources/numbers/8.png",
+    "resources/numbers/9.png",
+}
 
 function love.load()
     bas.starta(bas.hanteraSignaler)
@@ -26,11 +38,18 @@ function love.load()
     happy = Sprite(125, 250, 0, 0, 0.14, spelarkostymer)
     golvtorn = Sprite(850, 100, -5, 0, 0.14, tornkostymer)
     taktorn = Sprite(940, -100, -5, 0, -0.14, tornkostymer)
+    ental = Sprite(60, 10, 0, 0, 0.30, nummerkostymer)
+    tiotal = Sprite(40, 10, 0, 0, 0.30, nummerkostymer)
+    hundratal = Sprite(20, 10, 0, 0, 0.30, nummerkostymer)
     table.insert(sprites, happy)
+    table.insert(sprites, ental)
+    table.insert(sprites, tiotal)
+    table.insert(sprites, hundratal)
     bas.repetera(animera, 0.15, true, happy)
     bas.repetera(skapaTorn, 1.5, true)
     bas.startaGrafik(happy, uppdateraSpelare)
     spelstatus = "paus"
+    score = 0
 end
 
 function love.update()
@@ -46,6 +65,9 @@ end
 
 function love.draw()
     love.graphics.draw(bakgrund, 0, 0, 0, 1.2)
+    for _, torn in pairs(hinder) do
+        torn:rita()
+    end
     for _, sprite in pairs(sprites) do
         sprite:rita()
     end
@@ -74,13 +96,37 @@ function start()
     spelstatus = "startad"
 end
 
+function success(sprite)
+    if sprite.x < happy.x then
+        score = score + 1
+        uppdateraScore()
+    else
+        bas.repetera(success, 0.23, false, sprite)
+    end
+end
+
+function uppdateraScore()
+    ental.kostym = score % 10 + 1
+    tiotal.kostym = math.floor(score / 10) % 10 + 1
+    hundratal.kostym = math.floor(score / 100) % 10 + 1
+end
+
 function reset()
     sprites = {}
     hinder = {}
     table.insert(sprites, happy)
+    table.insert(sprites, ental)
+    table.insert(sprites, tiotal)
+    table.insert(sprites, hundratal)
     happy.y = 250
     happy.vinkel = 0
     spelstatus = "paus"
+    score = 0
+    uppdateraScore()
+end
+
+function gameover()
+
 end
 
 function skapaTorn()
@@ -91,12 +137,11 @@ function skapaTorn()
     taktornkopia.y = slump - 100
     taktornkopia.kostym = slump % table.getn(taktornkopia.kostymer) + 1
     golvtornkopia.kostym = taktornkopia.kostym
-    table.insert(sprites, golvtornkopia)
-    table.insert(sprites, taktornkopia)
     table.insert(hinder, golvtornkopia)
     table.insert(hinder, taktornkopia)
     bas.startaGrafik(golvtornkopia, uppdateraTorn)
     bas.startaGrafik(taktornkopia, uppdateraTorn)
+    bas.repetera(success, 0.2, false, golvtornkopia)
 end
 
 function fly(sprite)

@@ -49,7 +49,7 @@ function bas.repetera(funktion, paus, repetera, ...)
 end
 
 -- Kör Schemalagda funktioner
-function bas.repeteraAlla() 
+function bas.repeteraAlla()
     repeat
         for i, schema in pairs(scheman) do
             if i <= tid then
@@ -81,6 +81,6 @@ function bas.startaGrafik(sprite, funktion)
     grafik[sprite]=funktion
 end
 
-function bas.raderaGrafik(sprite) 
+function bas.raderaGrafik(sprite)
     grafik[sprite] = nil
 end
