@@ -1,4 +1,4 @@
-package.path = "../verktyg/?.lua;" .. package.path
+package.path = "../verktyg/?.lua;..\\verktyg\\?.lua;" .. package.path
 require "bas"
 require "sprite"
 
