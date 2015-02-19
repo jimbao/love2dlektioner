@@ -201,8 +201,22 @@ Med denna kod så kommer spelet återställas till startpunkten varje gång happ
 
 ## Lägg till en bakgrund
 
-## Räkna poäng
+För att spelet ska se lite snyggare ut så kan vi lägga till en bakgrund
 
-## Rita poäng
+Ladda in bakgrunden i love.load()
 
-## Game over
+```
+bakgrund = love.graphics.newImage( "resources/background.png" )
+```
+
+Visa bakgrunden genom att rita den först av allt i love.draw()
+
+```
+love.graphics.draw(bakgrund, 0, 0, 0, 1.2)
+```
+
+## Utmaningar
+
+* Gör så att övre och undre tornet inte alltid har samma färg
+* Gör en poängräknare med love.graphics.print("Text", x, y)
+* Gör att spelet stannar och visar game over i 2 sekunder och sen byter till get ready
