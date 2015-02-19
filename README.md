@@ -19,3 +19,4 @@ For any other projects or redistribution you need to purchase an appropriate lic
 
 * [Lektion 1](https://github.com/jimbao/love2dtutorial/tree/master/screensaver)
 * [Lektion 2](https://github.com/jimbao/love2dtutorial/tree/master/happybird)
+* [Lektion 3](https://github.com/jimbao/love2dtutorial/tree/master/points)
