@@ -39,27 +39,33 @@ function bas.tick()
     end
 end
 
--- DEFECT: 2 calls scheduled at the same time will overwrite eachother
 -- Schemalägg ett funktionsanrop
 function bas.repetera(funktion, paus, repetera, ...)
     -- params: function, integer, boolean
-    scheman[tid + paus] = {
-        ["funktion"]=funktion, ["paus"]=paus, ["repetera"]=repetera, ["params"]={...}
+    taskid = {}
+    scheman[tostring(taskid)] = {
+        [tid + paus]={
+        ["funktion"]=funktion, ["paus"]=paus, ["repetera"]=repetera, ["params"]={...}}
     }
 end
 
 -- Kör Schemalagda funktioner
 function bas.repeteraAlla()
     repeat
-        for i, schema in pairs(scheman) do
-            if i <= tid then
-                schema["funktion"](unpack(schema["params"]))
-                if schema["repetera"] then
-                    bas.repetera(
-                        schema["funktion"], schema["paus"], schema["repetera"], unpack(schema["params"])
-                    )
+        for id, tasks in pairs(scheman) do
+            for i, schema in pairs(tasks) do
+                --print(i, tid)
+                if i <= tid then
+                    schema["funktion"](unpack(schema["params"]))
+                    if schema["repetera"] then
+                        bas.repetera(
+                            schema["funktion"], schema["paus"], schema["repetera"], unpack(schema["params"])
+                        )
+                    end
+                    --print(scheman[id])
+                    scheman[id] = nil
+                    --print(scheman[id])
                 end
-                scheman[i] = nil
             end
         end
         coroutine.yield()
