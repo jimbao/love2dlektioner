@@ -45,6 +45,8 @@ lilakostymer = {
 }
 
 sprites = {}
+fiender = {}
+eldklot = {}
 
 function love.load()
     bas.starta(bas.hanteraSignaler)
@@ -57,6 +59,8 @@ function love.load()
     spelare = Sprite(75, 250, 0, 0, 0.14, spelarkostymer, spelaranimationer)
     rodfiende = Sprite(800, 0, -5, 0, 0.14, rodkostymer, fiendeanimationer)
     lilafiende = Sprite(800, 0, -5, 0, 0.14, lilakostymer, fiendeanimationer)
+    table.insert(fiender, rodfiende)
+    table.insert(fiender, lilafiende)
     table.insert(sprites, himmel)
     table.insert(sprites, berg3)
     table.insert(sprites, berg2)
@@ -111,14 +115,26 @@ end
 function uppdateraSkott(skott)
     skott.x = skott.x + skott.xfart
     if skott.x > 1000 then
-        -- Minneshantering
-        sprites[skott] = nil
         bas.raderaGrafik(skott)
+        eldklot[tostring(skott)] = nil
+        sprites[tostring(skott)] = nil
+    end
+    for i, fiende in pairs(fiender) do
+        if fiende:krock(skott) then
+            fiende:stopAnimation("explode")
+        end
     end
 end
 
 function uppdateraFiende(fiende)
     fiende.x = fiende.x + fiende.xfart
+    if fiende.x < -100 then
+        fiender[fiende] = nil
+        sprites[tostring(fiende)] = nil
+        fiender[tostring(fiende)] = nil
+        bas.raderaGrafik(fiende)
+        print("f radera")
+    end
 end
 
 function animera(sprite)
@@ -129,7 +145,8 @@ function skjut(sprite)
     sprite:spelaAnimation("skjut")
     skottkopia = skott:kopiera()
     skottkopia.x, skottkopia.y = sprite.x + sprite.bredd, sprite.y + sprite.hojd / 2
-    table.insert(sprites, skottkopia)
+    sprites[tostring(skottkopia)] = skottkopia
+    eldklot[tostring(skottkopia)] = skottkopia
     bas.startaGrafik(skottkopia, uppdateraSkott)
 end
 
@@ -149,8 +166,12 @@ function scrollabakgrund(background)
 end
 
 function skapafiende()
-    fiende = rodfiende:kopiera()
-    table.insert(sprites, fiende)
+    slump = math.random(0, 550)
+    fiendeslump = math.random(1, 2)
+    fiende = fiender[fiendeslump]:kopiera()
+    fiende.y = slump
+    sprites[tostring(fiende)] = fiende
+    fiender[tostring(fiende)] = fiende
     bas.startaGrafik(fiende, uppdateraFiende)
     bas.repetera(animera, 0.15, true, fiende)
 end
