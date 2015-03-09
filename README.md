@@ -1,4 +1,4 @@
-# love2dtutorial
+# love2dlektioner
 
 Love 2d lessons in Swedish
 
