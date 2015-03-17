@@ -32,6 +32,13 @@ fiendeanimationer = {
     }
 }
 
+orangekostymer = {
+    "resources/enemies/orange/frame-1.png",
+    "resources/enemies/orange/frame-2.png",
+    "resources/enemies/orange/frame-3.png",
+    "resources/enemies/orange/frame-4.png",
+}
+
 rodkostymer = {
     "resources/enemies/red/frame-1.png",
     "resources/enemies/red/frame-2.png",
@@ -60,14 +67,17 @@ function love.load()
     spelare = Sprite(75, 250, 0, 0, 0.14, spelarkostymer, spelaranimationer)
     rodfiende = Sprite(800, 0, -5, 0, 0.14, rodkostymer, fiendeanimationer)
     lilafiende = Sprite(800, 0, -5, 0, 0.14, lilakostymer, fiendeanimationer)
+    orangefiende = Sprite(800, 0, -5, 0, 0.14, orangekostymer, fiendeanimationer)
     table.insert(fiendemallar, rodfiende)
     table.insert(fiendemallar, lilafiende)
+    table.insert(fiendemallar, orangefiende)
     table.insert(sprites, himmel)
     table.insert(sprites, berg3)
     table.insert(sprites, berg2)
     table.insert(sprites, berg1)
     table.insert(sprites, spelare)
     bas.repetera(animera, 0.15, true, spelare)
+    bas.repetera(skapafiende, 0.8, true)
     bas.startaGrafik(spelare, uppdateraSpelare)
     bas.startaGrafik(himmel, scrollabakgrund)
     bas.startaGrafik(berg3, scrollabakgrund)
@@ -99,7 +109,6 @@ function love.keypressed(key)
     end
     if key == " " then
         bas.skickaSignal(skjut, spelare)
-        bas.skickaSignal(skapafiende)
     end
 end
 
@@ -122,17 +131,24 @@ function uppdateraSkott(skott)
     end
     for i, fiende in pairs(fiender) do
         if fiende ~= nil and fiende:krock(skott) == true then
-            fiende:stopAnimation("explode")
+            fiende:stopAnimation("explode", raderaFiende)
+            bas.raderaGrafik(skott)
+            eldklot[tostring(skott)] = nil
+            sprites[tostring(skott)] = nil
         end
     end
+end
+
+function raderaFiende(fiende)
+    sprites[tostring(fiende)] = nil
+    fiender[tostring(fiende)] = nil
+    bas.raderaGrafik(fiende)
 end
 
 function uppdateraFiende(fiende)
     fiende.x = fiende.x + fiende.xfart
     if fiende.x < -100 then
-        sprites[tostring(fiende)] = nil
-        fiender[tostring(fiende)] = nil
-        bas.raderaGrafik(fiende)
+        raderaFiende(fiende)
     end
 end
 
@@ -166,7 +182,7 @@ end
 
 function skapafiende()
     slump = math.random(0, 550)
-    fiendeslump = math.random(1, 2)
+    fiendeslump = math.random(1, 3)
     fiende = fiendemallar[fiendeslump]:kopiera()
     fiende.y = slump
     sprites[tostring(fiende)] = fiende

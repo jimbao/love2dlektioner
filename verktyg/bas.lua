@@ -88,8 +88,4 @@ end
 
 function bas.raderaGrafik(sprite)
     grafik[tostring(sprite)] = nil
-    print("radera")
-    for k, v in pairs(grafik) do
-        print(k, v)
-    end
 end
