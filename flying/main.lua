@@ -46,6 +46,7 @@ lilakostymer = {
 
 sprites = {}
 fiender = {}
+fiendemallar = {}
 eldklot = {}
 
 function love.load()
@@ -59,8 +60,8 @@ function love.load()
     spelare = Sprite(75, 250, 0, 0, 0.14, spelarkostymer, spelaranimationer)
     rodfiende = Sprite(800, 0, -5, 0, 0.14, rodkostymer, fiendeanimationer)
     lilafiende = Sprite(800, 0, -5, 0, 0.14, lilakostymer, fiendeanimationer)
-    table.insert(fiender, rodfiende)
-    table.insert(fiender, lilafiende)
+    table.insert(fiendemallar, rodfiende)
+    table.insert(fiendemallar, lilafiende)
     table.insert(sprites, himmel)
     table.insert(sprites, berg3)
     table.insert(sprites, berg2)
@@ -114,13 +115,13 @@ end
 
 function uppdateraSkott(skott)
     skott.x = skott.x + skott.xfart
-    if skott.x > 1000 then
+    if skott.x > 850 then
         bas.raderaGrafik(skott)
         eldklot[tostring(skott)] = nil
         sprites[tostring(skott)] = nil
     end
     for i, fiende in pairs(fiender) do
-        if fiende:krock(skott) then
+        if fiende ~= nil and fiende:krock(skott) == true then
             fiende:stopAnimation("explode")
         end
     end
@@ -129,11 +130,9 @@ end
 function uppdateraFiende(fiende)
     fiende.x = fiende.x + fiende.xfart
     if fiende.x < -100 then
-        fiender[fiende] = nil
         sprites[tostring(fiende)] = nil
         fiender[tostring(fiende)] = nil
         bas.raderaGrafik(fiende)
-        print("f radera")
     end
 end
 
@@ -168,7 +167,7 @@ end
 function skapafiende()
     slump = math.random(0, 550)
     fiendeslump = math.random(1, 2)
-    fiende = fiender[fiendeslump]:kopiera()
+    fiende = fiendemallar[fiendeslump]:kopiera()
     fiende.y = slump
     sprites[tostring(fiende)] = fiende
     fiender[tostring(fiende)] = fiende

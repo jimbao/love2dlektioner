@@ -62,9 +62,7 @@ function bas.repeteraAlla()
                             schema["funktion"], schema["paus"], schema["repetera"], unpack(schema["params"])
                         )
                     end
-                    --print(scheman[id])
                     scheman[id] = nil
-                    --print(scheman[id])
                 end
             end
         end
@@ -75,7 +73,8 @@ end
 -- Uppdatera grafik
 function bas.uppdateraGrafik()
     repeat
-        for sprite, funktion in pairs(grafik) do
+        for id, table in pairs(grafik) do
+            funktion, sprite = unpack(table)
             funktion(sprite)
         end
         coroutine.yield()
@@ -84,9 +83,13 @@ end
 
 function bas.startaGrafik(sprite, funktion)
     -- params: sprite med funktionen uppdatera
-    grafik[sprite]=funktion
+    grafik[tostring(sprite)]={funktion, sprite}
 end
 
 function bas.raderaGrafik(sprite)
-    grafik[sprite] = nil
+    grafik[tostring(sprite)] = nil
+    print("radera")
+    for k, v in pairs(grafik) do
+        print(k, v)
+    end
 end
