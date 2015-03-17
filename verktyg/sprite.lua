@@ -51,6 +51,9 @@ function Sprite:bytKostym()
         self.animation = self.kostymer
     elseif self.stop then
         self.kostym = table.getn(self.animation)
+        if self.callback ~= nil then
+            self.callback(self)
+        end
     end
 end
 
@@ -59,8 +62,9 @@ function Sprite:spelaAnimation(namn)
     self.animation = self.animationer[namn]
 end
 
-function Sprite:stopAnimation(namn)
+function Sprite:stopAnimation(namn, callback)
     self.stop = true
+    self.callback = callback
     self.animation = self.animationer[namn]
 end
 
