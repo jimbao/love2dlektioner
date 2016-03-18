@@ -80,7 +80,7 @@ function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
     end
-    if key == " " then
+    if key == "space" then
         if spelstatus ~= "startad" then
             start()
         end
@@ -162,5 +162,3 @@ function uppdateraSpelare(happy)
         happy.y = happy.y + happy.yfart
     end
 end
-
-
