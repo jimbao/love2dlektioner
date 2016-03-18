@@ -107,7 +107,7 @@ function love.keypressed(key)
     if key == "down" then
         bas.skickaSignal(ner, spelare)
     end
-    if key == " " then
+    if key == "space" then
         bas.skickaSignal(skjut, spelare)
     end
 end
